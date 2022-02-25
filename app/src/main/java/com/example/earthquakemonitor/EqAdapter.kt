@@ -1,5 +1,6 @@
 package com.example.earthquakemonitor
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.earthquakemonitor.EqAdapter.EqViewHolder
+import com.example.earthquakemonitor.databinding.EqListItemBinding
 
+private val TAG= EqAdapter::class.java.simpleName
 class EqAdapter: ListAdapter<Earthquake, EqViewHolder>(DiffCallback) {
 
 
@@ -24,26 +27,35 @@ class EqAdapter: ListAdapter<Earthquake, EqViewHolder>(DiffCallback) {
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EqViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.eq_list_item,parent,
-            false)
+    lateinit var onItemClickListener:(Earthquake) -> Unit
 
-        return  EqViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EqViewHolder {
+
+        val binding = EqListItemBinding.inflate(LayoutInflater.from(parent.context))
+        return  EqViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: EqViewHolder, position: Int) {
     val earthquake = getItem(position)
-        holder.magnitudeText.text=earthquake.magnitude.toString()
-        holder.placeText.text=earthquake.place.toString()
-
-
+        holder.bind(earthquake)
 
     }
 
-    inner class EqViewHolder(val view:View):RecyclerView.ViewHolder(view){
-        val magnitudeText = view.findViewById<TextView>(R.id.eq_magnitude_text)
-        val imageArrow = view.findViewById<ImageView>(R.id.eq_arrow_image)
-        val placeText = view.findViewById<TextView>(R.id.eq_place_text)
+    inner class EqViewHolder(private val binding:EqListItemBinding):
+        RecyclerView.ViewHolder(binding.root){
+
+        fun bind(earthquake: Earthquake){
+            binding.eqMagnitudeText.text=earthquake.magnitude.toString()
+            binding.eqPlaceText.text=earthquake.place
+            binding.executePendingBindings()
+            binding.root.setOnClickListener{
+                if (::onItemClickListener.isInitialized){
+                    onItemClickListener(earthquake)
+               }else{
+                   Log.e(TAG,"onItemClickListener not Initialized")
+               }
+            }
+        }
 
     }
 
