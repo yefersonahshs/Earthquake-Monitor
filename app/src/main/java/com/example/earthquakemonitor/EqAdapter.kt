@@ -41,7 +41,7 @@ class EqAdapter: ListAdapter<Earthquake, EqViewHolder>(DiffCallback) {
 
     }
 
-    inner class EqViewHolder(private val binding:EqListItemBinding):
+    inner class EqViewHolder(private val binding: EqListItemBinding):
         RecyclerView.ViewHolder(binding.root){
 
         fun bind(earthquake: Earthquake){

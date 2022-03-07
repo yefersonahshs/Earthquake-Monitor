@@ -14,10 +14,10 @@
         <TextView
             android:id="@+id/eq_magnitude_text"
             android:layout_width="wrap_content"
-            tools:text="4,3"
-            android:textStyle="bold"
+            android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:layout_height="wrap_content" />
+            android:textStyle="bold"
+            tools:text="4,3" />
 
         <ImageView
             android:id="@+id/eq_arrow_image"
